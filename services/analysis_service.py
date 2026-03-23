@@ -21,7 +21,6 @@ from config import ADMIN_IDS, ADMIN_USERNAMES, logger, CATCOM_PATH
 from categories import load_cached_categories, load_user_categories
 from api.mpstats_api import MPStatsAPI
 from excel_handler import create_excel_report
-from utils.helpers import safe_get, normalize_string
 
 logger = logging.getLogger(__name__)
 

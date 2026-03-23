@@ -183,6 +183,14 @@ async def post_init(application: Application):
             logger.error(f"❌ Ошибка при загрузке комиссий при старте: {e}")
     else:
         logger.info("⏭️ Пропускаю загрузку комиссий (модуль не найден)")
+    
+    # Автоматическая миграция при первом запуске
+    if USE_SQLITE:
+        try:
+            from storage.migrate import migrate
+            migrate()
+        except Exception as e:
+            logger.error(f"Migration error: {e}")
     # ==========================================================
     
     logger.info("✅ Бот готов к работе")

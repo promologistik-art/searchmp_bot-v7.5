@@ -24,10 +24,18 @@ ADMIN_USERNAMES = [username.strip().replace('@', '')
                    for username in os.getenv('ADMIN_USERNAMES', '').split(',') 
                    if username.strip()]
 
+# === ПУТЬ К ОБЩЕМУ ХРАНИЛИЩУ (bothost.ru) ===
+SHARED_DIR = os.getenv('SHARED_DIR', '/app/shared')
+
+# Пути к файлам (папки создадутся при первом обращении)
+DB_DIR = os.path.join(SHARED_DIR, 'database')
+DATABASE_PATH = os.path.join(DB_DIR, 'users.db')
+
 # === ПЕРЕКЛЮЧАТЕЛЬ БАЗЫ ДАННЫХ ===
+# True = SQLite, False = JSON (старый)
 USE_SQLITE = os.getenv('USE_SQLITE', 'true').lower() == 'true'
 
-# === ПУТИ К ФАЙЛАМ (для совместимости) ===
+# === ПУТИ К ФАЙЛАМ ДЛЯ JSON (совместимость) ===
 USERS_DB_FILE = "users_database.json"
 HISTORY_FILE = "viewed_categories.pkl"
 
@@ -86,6 +94,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-print(f"✅ Конфигурация загружена. USE_SQLITE = {USE_SQLITE}")
+print(f"✅ Config loaded. USE_SQLITE={USE_SQLITE}, SHARED_DIR={SHARED_DIR}")
 print(f"✅ ADMIN_IDS: {ADMIN_IDS}")
 print(f"✅ ADMIN_USERNAMES: {ADMIN_USERNAMES}")

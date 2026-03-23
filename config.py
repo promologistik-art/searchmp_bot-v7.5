@@ -1,53 +1,48 @@
+# config.py
 import os
 import logging
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# Токены
+# === ТОКЕНЫ ===
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 MPSTATS_TOKEN = os.getenv('MPSTATS_TOKEN')
 
-# ID админа (для обратной совместимости)
-ADMIN_IDS = [int(id.strip()) for id in os.getenv('ADMIN_IDS', '').split(',') if id.strip()]
-
-# Username админов (новый способ)
-ADMIN_USERNAMES = [username.strip().replace('@', '') for username in os.getenv('ADMIN_USERNAMES', '').split(',') if username.strip()]
-
-# Функция для динамического добавления админов
-def update_admin_usernames(username):
-    global ADMIN_USERNAMES
-    if username not in ADMIN_USERNAMES:
-        ADMIN_USERNAMES.append(username)
-    # Здесь можно сохранять в .env или отдельный файл
-    # Пока просто возвращаем обновленный список
-    return ADMIN_USERNAMES
-
 if not BOT_TOKEN or not MPSTATS_TOKEN:
-    raise ValueError("❌ Проверьте файл .env (нужны BOT_TOKEN и MPSTATS_TOKEN)")
+    raise ValueError("❌ Проверьте переменные окружения: BOT_TOKEN и MPSTATS_TOKEN")
 
-# API настройки
+# === АДМИНЫ ===
+ADMIN_IDS = []
+admin_ids_str = os.getenv('ADMIN_IDS', '')
+for id_str in admin_ids_str.split(','):
+    id_str = id_str.strip()
+    if id_str and id_str.isdigit():
+        ADMIN_IDS.append(int(id_str))
+
+ADMIN_USERNAMES = [username.strip().replace('@', '') 
+                   for username in os.getenv('ADMIN_USERNAMES', '').split(',') 
+                   if username.strip()]
+
+# === ПЕРЕКЛЮЧАТЕЛЬ БАЗЫ ДАННЫХ ===
+USE_SQLITE = os.getenv('USE_SQLITE', 'true').lower() == 'true'
+
+# === ПУТИ К ФАЙЛАМ (для совместимости) ===
+USERS_DB_FILE = "users_database.json"
+HISTORY_FILE = "viewed_categories.pkl"
+
+# === API НАСТРОЙКИ ===
 MPSTATS_API_URL = "https://mpstats.io/api"
 HEADERS = {
     "X-Mpstats-TOKEN": MPSTATS_TOKEN,
     "Content-Type": "application/json"
 }
 
-# Файлы для кэширования
-CATEGORIES_FILE = "ozon_categories.pkl"
-USER_CATEGORIES_FILE = "user_categories.pkl"
-HISTORY_FILE = "viewed_categories.pkl"
-USERS_DB_FILE = "users_database.json"
-
-# Настройка логирования
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-# Состояния для диалогов
+# === СОСТОЯНИЯ ДЛЯ ДИАЛОГОВ ===
 CRITERIA_CHOICE, CRITERIA_REVENUE, CRITERIA_PRICE, CRITERIA_COMPETITORS, CRITERIA_VOLUME = range(5)
 UPLOAD_CATEGORIES = 5
 
-# Списки исключений
+# === СПИСКИ ИСКЛЮЧЕНИЙ ===
 EXCLUDED = [
     "туалетная бумага", "туалетная", "бумага туалетная", "туалетные",
     "одежда", "ткани", "постельное", "белье", "платье", "юбка", "брюки",
@@ -81,5 +76,16 @@ LARGE_CATEGORIES = [
     "велосипед", "самокат", "лыжи", "сноуборд", "ковер", "палас",
     "стройматериалы", "доска", "брус", "гипсокартон", "цемент",
 ]
-# Путь к файлу с комиссиями Ozon
+
 CATCOM_PATH = "catcom.xlsx"
+
+# === НАСТРОЙКА ЛОГИРОВАНИЯ ===
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+print(f"✅ Конфигурация загружена. USE_SQLITE = {USE_SQLITE}")
+print(f"✅ ADMIN_IDS: {ADMIN_IDS}")
+print(f"✅ ADMIN_USERNAMES: {ADMIN_USERNAMES}")

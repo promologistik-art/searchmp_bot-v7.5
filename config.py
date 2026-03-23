@@ -31,6 +31,11 @@ SHARED_DIR = os.getenv('SHARED_DIR', '/app/shared')
 DB_DIR = os.path.join(SHARED_DIR, 'database')
 DATABASE_PATH = os.path.join(DB_DIR, 'users.db')
 
+# === ФАЙЛЫ ДЛЯ КЭШИРОВАНИЯ ===
+CATEGORIES_FILE = "ozon_categories.pkl"
+USER_CATEGORIES_FILE = "user_categories.pkl"
+HISTORY_FILE = "viewed_categories.pkl"
+
 # === ПЕРЕКЛЮЧАТЕЛЬ БАЗЫ ДАННЫХ ===
 # True = SQLite, False = JSON (старый)
 USE_SQLITE = os.getenv('USE_SQLITE', 'true').lower() == 'true'

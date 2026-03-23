@@ -31,18 +31,17 @@ SHARED_DIR = os.getenv('SHARED_DIR', '/app/shared')
 DB_DIR = os.path.join(SHARED_DIR, 'database')
 DATABASE_PATH = os.path.join(DB_DIR, 'users.db')
 
-# === ФАЙЛЫ ДЛЯ КЭШИРОВАНИЯ ===
-CATEGORIES_FILE = "ozon_categories.pkl"
-USER_CATEGORIES_FILE = "user_categories.pkl"
-HISTORY_FILE = "viewed_categories.pkl"
+# === ФАЙЛЫ ДЛЯ КЭШИРОВАНИЯ (в shared) ===
+CACHE_DIR = os.path.join(SHARED_DIR, 'cache')
+CATEGORIES_FILE = os.path.join(CACHE_DIR, 'ozon_categories.pkl')
+USER_CATEGORIES_FILE = os.path.join(CACHE_DIR, 'user_categories.pkl')
+HISTORY_FILE = os.path.join(CACHE_DIR, 'viewed_categories.pkl')
+
+# === ФАЙЛЫ ДЛЯ JSON (для совместимости, могут быть в корне) ===
+USERS_DB_FILE = "users_database.json"
 
 # === ПЕРЕКЛЮЧАТЕЛЬ БАЗЫ ДАННЫХ ===
-# True = SQLite, False = JSON (старый)
 USE_SQLITE = os.getenv('USE_SQLITE', 'true').lower() == 'true'
-
-# === ПУТИ К ФАЙЛАМ ДЛЯ JSON (совместимость) ===
-USERS_DB_FILE = "users_database.json"
-HISTORY_FILE = "viewed_categories.pkl"
 
 # === API НАСТРОЙКИ ===
 MPSTATS_API_URL = "https://mpstats.io/api"
